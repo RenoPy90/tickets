@@ -86,30 +86,4 @@
 
         card.innerHTML = `
           <div class="d-flex justify-content-between align-items-start mb-2">
-            <div>
-              <h6 class="fw-bold text-primary">${ticket.subject}</h6>
-              <p class="text-muted mb-1">${ticket.email}</p>
-              <p class="mb-1">${ticket.description}</p>
-            </div>
-            <span class="ticket-priority ${ticket.priority}">${ticket.priority}</span>
-          </div>
-          <div class="text-end text-secondary small">Asignado a: <strong>${ticket.assigned_to}</strong></div>
-        `;
-
-        container.appendChild(card);
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        const tickets = await fetchTickets();
-        renderTickets(tickets);
-      } catch (error) {
-        console.error('Error al obtener los tickets:', error);
-        document.getElementById('ticketContainer').innerHTML = 
-          '<p class="text-danger text-center">Error al cargar los tickets</p>';
-      }
-    });
-  </script>
-</body>
-</html>
+            <div

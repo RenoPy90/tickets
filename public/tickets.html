@@ -3,50 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lista de Tickets</title>
+  <title>Tickets Registrados</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body { font-family: Arial; padding: 20px; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { border: 1px solid #ddd; padding: 8px; }
-    th { background: #f2f2f2; }
+    body {
+      background: linear-gradient(to right, #e0f2ff, #ffffff);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .table-container {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 123, 255, 0.15);
+    }
+    .cloud-icon {
+      font-size: 2rem;
+      color: #0d6efd;
+    }
   </style>
 </head>
 <body>
-  <h2>Tickets Guardados</h2>
-  <table id="ticketsTable">
-    <thead>
-      <tr>
-        <th>Correo</th>
-        <th>Asunto</th>
-        <th>Descripción</th>
-        <th>Prioridad</th>
-        <th>Asignado a</th>
-        <th>Fecha</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-  <br/>
-  <a href="index.html">Volver</a>
+  <div class="container">
+    <div class="text-center mb-4">
+      <div class="cloud-icon">☁️</div>
+      <h2 class="fw-bold">Listado de Tickets</h2>
+    </div>
+    <div class="table-container">
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle text-center">
+          <thead class="table-primary">
+            <tr>
+              <th>Correo</th>
+              <th>Asunto</th>
+              <th>Descripción</th>
+              <th>Prioridad</th>
+              <th>Asignado a</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody id="ticketsTable"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <a href="index.html" class="btn btn-outline-primary">Volver al formulario</a>
+    </div>
+  </div>
 
   <script>
     async function cargarTickets() {
       const res = await fetch('/api/get-tickets');
       const tickets = await res.json();
-      const tbody = document.querySelector('#ticketsTable tbody');
+      const tbody = document.getElementById('ticketsTable');
+      tbody.innerHTML = '';
       tickets.forEach(t => {
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${t.email}</td>
           <td>${t.subject}</td>
           <td>${t.description}</td>
-          <td>${t.priority}</td>
+          <td><span class="badge bg-${getColor(t.priority)}">${t.priority}</span></td>
           <td>${t.assigned_to}</td>
           <td>${new Date(t.created_at).toLocaleString()}</td>
         `;
         tbody.appendChild(row);
       });
     }
+
+    function getColor(priority) {
+      switch (priority) {
+        case 'Alta': return 'danger';
+        case 'Media': return 'warning';
+        case 'Baja': return 'success';
+        default: return 'secondary';
+      }
+    }
+
     cargarTickets();
   </script>
 </body>

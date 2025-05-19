@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crear Ticket</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    form { max-width: 400px; margin: auto; }
+    input, textarea, select, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Crear Ticket</h2>
+  <form id="ticketForm">
+    <input type="email" id="email" placeholder="Correo" required />
+    <input type="text" id="subject" placeholder="Asunto" required />
+    <textarea id="description" placeholder="Descripción" required></textarea>
+    <select id="priority" required>
+      <option value="">Prioridad</option>
+      <option value="Alta">Alta</option>
+      <option value="Media">Media</option>
+      <option value="Baja">Baja</option>
+    </select>
+    <select id="assigned_to" required>
+      <option value="">Asignar a</option>
+      <option value="Rodolfo Dure">Rodolfo Dure</option>
+      <option value="Patricia Caceres">Patricia Caceres</option>
+    </select>
+    <button type="submit">Enviar</button>
+  </form>
+  <br/>
+  <a href="tickets.html">Ver Tickets</a>
+
+  <script>
+    document.getElementById('ticketForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const ticket = {
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        description: document.getElementById('description').value,
+        priority: document.getElementById('priority').value,
+        assigned_to: document.getElementById('assigned_to').value
+      };
+      const res = await fetch('/api/create-ticket', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ticket)
+      });
+      const result = await res.json();
+      alert(result.message);
+      if (res.ok) document.getElementById('ticketForm').reset();
+    });
+  </script>
+</body>
+</html>
